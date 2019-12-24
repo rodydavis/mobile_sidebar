@@ -1,8 +1,8 @@
 name: mobile_sidebar
-description: A Flutter plugin to show a sidebar on tablet and desktop then a list or gridview on mobile.
-version: 1.6.0
+description: A Responsive Sidebar for Flutter that follows Material Design
+version: 2.0.0
 author: Rody Davis Jr <rody.davis.jr@gmail.com>
-homepage: https://github.com/AppleEducate/plugins
+homepage: https://github.com/rodydavis/mobile_sidebar
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -10,8 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  auto_size_text: ^1.1.2
-  localstorage: ^2.0.0
 
 dev_dependencies:
   flutter_test:

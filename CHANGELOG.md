@@ -1,3 +1,7 @@
+## 2.0.0
+
+* BREAKING CHANGE - Complete redo to follow Material Design spec
+
 ## 1.6.0 - 05.15.2019
 
 * Support for More Tab on Bottom Navigation
