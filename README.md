@@ -6,12 +6,12 @@ Demo [here](https://rodydavis.github.io/mobile_sidebar/).
 
 ## Screenshots
 
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/1.png)
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/2.png)
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/3.png)
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/4.png)
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/5.png)
-![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/6.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/1.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/2.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/3.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/4.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/5.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/doc/6.png)
 
 ## Example
 
