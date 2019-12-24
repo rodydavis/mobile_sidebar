@@ -3,7 +3,6 @@ description: A Responsive Sidebar for Flutter that follows Material Design
 version: 2.0.0
 author: Rody Davis Jr <rody.davis.jr@gmail.com>
 homepage: https://github.com/rodydavis/mobile_sidebar
-
 environment:
   sdk: ">=2.2.2 <3.0.0"
 
@@ -14,5 +13,5 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+    
 flutter:
