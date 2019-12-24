@@ -2,56 +2,35 @@
 
 A Flutter plugin to show a sidebar on tablet and desktop then a list or gridview on mobile.
 
+Demo [here](https://rodydavis.github.io/mobile_sidebar/).
+
 ## Screenshots
 
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/1.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/2.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/3.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/4.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/5.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/6.png)
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/7.png)
-
-## Demo
-
-![](https://raw.githubusercontent.com/AppleEducate/plugins/master/packages/mobile_sidebar/screenshots/demo.gif)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/1.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/2.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/3.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/4.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/5.png)
+![](https://raw.githubusercontent.com/rodydavis/mobile_sidebar/master/screenshots/6.png)
 
 ## Example
 
-``` dart
-import 'dart:io';
-
+```dart
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:mobile_sidebar/mobile_sidebar.dart';
 
-void main() {
-  _setTargetPlatformForDesktop();
-  runApp(MyApp());
-}
-
-/// If the current platform is desktop, override the default platform to
-/// a supported platform (iOS for macOS, Android for Linux and Windows).
-/// Otherwise, do nothing.
-void _setTargetPlatformForDesktop() {
-  TargetPlatform targetPlatform;
-  if (Platform.isMacOS) {
-    targetPlatform = TargetPlatform.iOS;
-  } else if (Platform.isLinux || Platform.isWindows) {
-    targetPlatform = TargetPlatform.android;
-  }
-  if (targetPlatform != null) {
-    debugDefaultTargetPlatformOverride = targetPlatform;
-  }
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: new HomeScreen(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light(),
+      home: HomeScreen(),
     );
   }
 }
@@ -62,69 +41,179 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _showList = false;
-  final _breakpoint = 800.0;
+  int index = 0;
+  bool searching = false;
+  bool _loggedIn = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Mobile Side Menu Example'),
-        actions: <Widget>[
-          if (MediaQuery.of(context).size.width < _breakpoint) ...[
-            IconButton(
-              icon: Icon(_showList ? Icons.grid_on : Icons.grid_off),
-              onPressed: () {
-                if (mounted)
-                  setState(() {
-                    _showList = !_showList;
-                  });
-              },
-            )
-          ]
+      body: MobileSidebar(
+        currentIndex: index,
+        onTabChanged: (val) {
+          if (mounted)
+            setState(() {
+              index = val;
+            });
+        },
+        isSearching: searching,
+        isSearchChanged: (val) {
+          if (mounted)
+            setState(() {
+              searching = val;
+            });
+        },
+        titleBuilder: (context) {
+          return FancyTitle(
+            title: Text("My Logo"),
+            logo: FlutterLogo(),
+          );
+        },
+        accountBuilder: (context) {
+          if (_loggedIn) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  if (mounted)
+                    setState(() {
+                      _loggedIn = false;
+                    });
+                },
+                child: CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+              ),
+            );
+          }
+          return FlatButton(
+            child: Text("Sign In"),
+            onPressed: () {
+              if (mounted)
+                setState(() {
+                  _loggedIn = true;
+                });
+            },
+          );
+        },
+        showSearchButton: true,
+        tabs: <TabChild>[
+          TabChild(
+            icon: Icon(Icons.bluetooth),
+            title: 'Light Blue',
+            builder: (context) => NewScreen(
+              color: Colors.lightBlue,
+              name: 'Light Blue Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.info),
+            title: 'Light Green',
+            builder: (context) => NewScreen(
+              color: Colors.lightGreen,
+              name: 'Light Green Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.person),
+            title: 'Red',
+            builder: (context) => NewScreen(
+              color: Colors.red,
+              name: 'Red Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.info),
+            title: 'Light Green 3',
+            builder: (context) => NewScreen(
+              color: Colors.lightGreen,
+              name: 'Light Green Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.person),
+            title: 'Red 3',
+            builder: (context) => NewScreen(
+              color: Colors.red,
+              name: 'Red Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.info),
+            title: 'Light Green 4',
+            builder: (context) => NewScreen(
+              color: Colors.lightGreen,
+              name: 'Light Green Screen',
+            ),
+          ),
+          TabChild(
+            icon: Icon(Icons.person),
+            title: 'Red 4',
+            builder: (context) => NewScreen(
+              color: Colors.red,
+              name: 'Red Screen',
+            ),
+          ),
         ],
       ),
-      body: MobileSidebar(
-        items: <MenuItem>[
-          MenuItem(
-            icon: Icons.edit,
-            color: Colors.black,
-            title: 'Manage',
-            subtitle: 'Edit, Share, Delete',
-            child: Container(color: Colors.blueAccent),
-          ),
-          MenuItem(
-            icon: Icons.event,
-            color: Colors.blueAccent,
-            title: 'Tasks',
-            subtitle: 'Personal Tasks',
-            child: Container(color: Colors.purpleAccent),
-          ),
-          MenuItem(
-            icon: Icons.timer,
-            color: Colors.blueGrey,
-            title: 'Log',
-            subtitle: 'History of Results',
-            child: Container(color: Colors.black),
-          ),
-          MenuItem(
-            icon: Icons.star,
-            color: Colors.amber,
-            title: 'Favorites',
-            subtitle: 'Custom List',
-            child: Container(color: Colors.yellowAccent),
-          ),
-        ],
-        showList: _showList,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: Colors.redAccent,
-          heroTag: 'create-contact',
-          label: Text('Add new item'),
-          icon: Icon(Icons.add),
-          onPressed: () {},
+    );
+  }
+}
+
+class FancyTitle extends StatelessWidget {
+  const FancyTitle({
+    Key key,
+    @required this.title,
+    this.logo,
+  }) : super(key: key);
+
+  final Widget title;
+  final Widget logo;
+
+  @override
+  Widget build(BuildContext context) {
+    if (logo == null) {
+      return logo;
+    }
+    return Row(
+      children: <Widget>[
+        logo,
+        Container(width: 4.0),
+        title,
+      ],
+    );
+  }
+}
+
+class NewScreen extends StatelessWidget {
+  const NewScreen({
+    Key key,
+    @required this.color,
+    @required this.name,
+  }) : super(key: key);
+
+  final Color color;
+  final String name;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: color,
+      child: Center(
+        child: RaisedButton.icon(
+          icon: Icon(Icons.arrow_right),
+          label: Text("Push to Screen"),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => Scaffold(
+                appBar: AppBar(),
+                body: NewScreen(color: color, name: name),
+              ),
+            ));
+          },
         ),
       ),
     );
   }
 }
+
 ```

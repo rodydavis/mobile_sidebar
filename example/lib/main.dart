@@ -4,25 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import 'package:mobile_sidebar/mobile_sidebar.dart';
 
-void main() {
-  // _setTargetPlatformForDesktop();
-  runApp(MyApp());
-}
-
-// /// If the current platform is desktop, override the default platform to
-// /// a supported platform (iOS for macOS, Android for Linux and Windows).
-// /// Otherwise, do nothing.
-// void _setTargetPlatformForDesktop() {
-//   TargetPlatform targetPlatform;
-//   if (Platform.isMacOS) {
-//     targetPlatform = TargetPlatform.iOS;
-//   } else if (Platform.isLinux || Platform.isWindows) {
-//     targetPlatform = TargetPlatform.android;
-//   }
-//   if (targetPlatform != null) {
-//     debugDefaultTargetPlatformOverride = targetPlatform;
-//   }
-// }
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -43,9 +25,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int index = 0;
   bool searching = false;
+  bool _loggedIn = false;
   @override
   Widget build(BuildContext context) {
-    bool _loggedIn = false;
     return Scaffold(
       body: MobileSidebar(
         currentIndex: index,
@@ -70,13 +52,29 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         accountBuilder: (context) {
           if (_loggedIn) {
-            return CircleAvatar(
-              child: Icon(Icons.person),
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () {
+                  if (mounted)
+                    setState(() {
+                      _loggedIn = false;
+                    });
+                },
+                child: CircleAvatar(
+                  child: Icon(Icons.person),
+                ),
+              ),
             );
           }
           return FlatButton(
             child: Text("Sign In"),
-            onPressed: () {},
+            onPressed: () {
+              if (mounted)
+                setState(() {
+                  _loggedIn = true;
+                });
+            },
           );
         },
         showSearchButton: true,
@@ -138,19 +136,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
-        // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        // floatingActionButton: FloatingActionButton.extended(
-        //   backgroundColor: Colors.redAccent,
-        //   heroTag: 'toggle_grid',
-        //   label: Text('${_bottomNav ? 'Hide' : 'Show'} Bottom Bar'),
-        //   icon: Icon(Icons.border_bottom),
-        //   onPressed: () {
-        //     if (mounted)
-        //       setState(() {
-        //         _bottomNav = !_bottomNav;
-        //       });
-        //   },
-        // ),
       ),
     );
   }
