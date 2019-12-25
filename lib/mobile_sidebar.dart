@@ -76,12 +76,18 @@ class MobileSidebar extends StatelessWidget {
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(kToolbarHeight),
             child: Material(
-              elevation: Theme.of(context).appBarTheme?.elevation ?? 4.0,
+              color: theme.appBarTheme.color,
+              elevation: theme.appBarTheme?.elevation ?? 4.0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   if (isSearching) ...[
-                    _menuIconBuilder(context),
+                    if (_showDrawer) ...[
+                      _menuIconBuilder(context)
+                    ] else ...[
+                      Container(width: 8.0),
+                      titleBuilder(context)
+                    ],
                     Expanded(
                       child: _buildSearchBar(),
                     ),
@@ -320,6 +326,7 @@ class MobileSidebar extends StatelessWidget {
                   Expanded(
                     child: ListView.separated(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: _titles.length,
                       separatorBuilder: (context, index) {
                         return _divider;

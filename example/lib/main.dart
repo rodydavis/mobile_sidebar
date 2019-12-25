@@ -28,115 +28,113 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _loggedIn = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: MobileSidebar(
-        currentIndex: index,
-        onTabChanged: (val) {
-          if (mounted)
-            setState(() {
-              index = val;
-            });
-        },
-        isSearching: searching,
-        isSearchChanged: (val) {
-          if (mounted)
-            setState(() {
-              searching = val;
-            });
-        },
-        titleBuilder: (context) {
-          return FancyTitle(
-            title: Text("My Logo"),
-            logo: FlutterLogo(),
-          );
-        },
-        accountBuilder: (context) {
-          if (_loggedIn) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: InkWell(
-                onTap: () {
-                  if (mounted)
-                    setState(() {
-                      _loggedIn = false;
-                    });
-                },
-                child: CircleAvatar(
-                  child: Icon(Icons.person),
-                ),
+    return MobileSidebar(
+      currentIndex: index,
+      onTabChanged: (val) {
+        if (mounted)
+          setState(() {
+            index = val;
+          });
+      },
+      isSearching: searching,
+      isSearchChanged: (val) {
+        if (mounted)
+          setState(() {
+            searching = val;
+          });
+      },
+      titleBuilder: (context) {
+        return FancyTitle(
+          title: Text("My Logo"),
+          logo: FlutterLogo(),
+        );
+      },
+      accountBuilder: (context) {
+        if (_loggedIn) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InkWell(
+              onTap: () {
+                if (mounted)
+                  setState(() {
+                    _loggedIn = false;
+                  });
+              },
+              child: CircleAvatar(
+                child: Icon(Icons.person),
               ),
-            );
-          }
-          return FlatButton(
-            child: Text("Sign In"),
-            onPressed: () {
-              if (mounted)
-                setState(() {
-                  _loggedIn = true;
-                });
-            },
+            ),
           );
-        },
-        showSearchButton: true,
-        tabs: <TabChild>[
-          TabChild(
-            icon: Icon(Icons.bluetooth),
-            title: 'Light Blue',
-            builder: (context) => NewScreen(
-              color: Colors.lightBlue,
-              name: 'Light Blue Screen',
-            ),
+        }
+        return FlatButton(
+          child: Text("Sign In"),
+          onPressed: () {
+            if (mounted)
+              setState(() {
+                _loggedIn = true;
+              });
+          },
+        );
+      },
+      showSearchButton: true,
+      tabs: <TabChild>[
+        TabChild(
+          icon: Icon(Icons.bluetooth),
+          title: 'Light Blue',
+          builder: (context) => NewScreen(
+            color: Colors.lightBlue,
+            name: 'Light Blue Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.info),
-            title: 'Light Green',
-            builder: (context) => NewScreen(
-              color: Colors.lightGreen,
-              name: 'Light Green Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.info),
+          title: 'Light Green',
+          builder: (context) => NewScreen(
+            color: Colors.lightGreen,
+            name: 'Light Green Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.person),
-            title: 'Red',
-            builder: (context) => NewScreen(
-              color: Colors.red,
-              name: 'Red Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.person),
+          title: 'Red',
+          builder: (context) => NewScreen(
+            color: Colors.red,
+            name: 'Red Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.info),
-            title: 'Light Green 3',
-            builder: (context) => NewScreen(
-              color: Colors.lightGreen,
-              name: 'Light Green Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.info),
+          title: 'Light Green 3',
+          builder: (context) => NewScreen(
+            color: Colors.lightGreen,
+            name: 'Light Green Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.person),
-            title: 'Red 3',
-            builder: (context) => NewScreen(
-              color: Colors.red,
-              name: 'Red Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.person),
+          title: 'Red 3',
+          builder: (context) => NewScreen(
+            color: Colors.red,
+            name: 'Red Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.info),
-            title: 'Light Green 4',
-            builder: (context) => NewScreen(
-              color: Colors.lightGreen,
-              name: 'Light Green Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.info),
+          title: 'Light Green 4',
+          builder: (context) => NewScreen(
+            color: Colors.lightGreen,
+            name: 'Light Green Screen',
           ),
-          TabChild(
-            icon: Icon(Icons.person),
-            title: 'Red 4',
-            builder: (context) => NewScreen(
-              color: Colors.red,
-              name: 'Red Screen',
-            ),
+        ),
+        TabChild(
+          icon: Icon(Icons.person),
+          title: 'Red 4',
+          builder: (context) => NewScreen(
+            color: Colors.red,
+            name: 'Red Screen',
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
