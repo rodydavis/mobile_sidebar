@@ -1,3 +1,7 @@
+## 2.0.1
+
+* Layout fixes
+
 ## 2.0.0
 
 * BREAKING CHANGE - Complete redo to follow Material Design spec

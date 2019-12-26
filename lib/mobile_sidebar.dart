@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -34,6 +35,7 @@ class MobileSidebar extends StatelessWidget {
   final ValueChanged<bool> isSearchChanged;
   final ValueChanged<int> onTabChanged;
   final ValueChanged<String> searchChanged;
+  final double tabWidth;
 
   MobileSidebar({
     Key key,
@@ -42,6 +44,7 @@ class MobileSidebar extends StatelessWidget {
     @required this.onTabChanged,
     @required this.currentIndex,
     this.ctaBuilder,
+    this.tabWidth = 30.0,
     this.accountBuilder,
     this.searchBarBuilder,
     this.searchChanged,
@@ -105,73 +108,78 @@ class MobileSidebar extends StatelessWidget {
                     ),
                     if (!_showDrawer) ...[
                       Expanded(
-                        child: Center(child: LayoutBuilder(
-                          builder: (context, subDimens) {
-                            double _tabWidth = 30.0;
-                            for (var tab in _titles) {
-                              final w = _getTextWidth(theme, tab, subDimens);
-                              if (w > _tabWidth) {
-                                _tabWidth = min(_tabWidth, w);
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: LayoutBuilder(
+                            builder: (context, subDimens) {
+                              final _titleCountToRemove = (subDimens.maxWidth /
+                                      (_titles.length * tabWidth))
+                                  .ceil();
+                              List<String> _subTitles =
+                                  _titles.take(_titleCountToRemove).toList();
+                              List<String> _extraTitles =
+                                  _titles.skip(_subTitles.length).toList();
+                              final _selected = _titles[currentIndex];
+                              if (_subTitles.indexOf(_selected) == -1) {
+                                _subTitles = [_selected];
+                                _extraTitles = _titles
+                                    .where((t) => t != _selected)
+                                    .toList();
                               }
-                            }
-                            final _titleCountToRemove = (subDimens.maxWidth /
-                                    (_titles.length * _tabWidth))
-                                .ceil();
-                            List<String> _subTitles =
-                                _titles.take(_titleCountToRemove).toList();
-                            List<String> _extraTitles =
-                                _titles.skip(_subTitles.length).toList();
-                            final _selected = _titles[currentIndex];
-                            if (_subTitles.indexOf(_selected) == -1) {
-                              _subTitles = [_selected];
-                              _extraTitles =
-                                  _titles.where((t) => t != _selected).toList();
-                            }
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                for (var tab in _subTitles) ...[
-                                  _buildTab(_titles, tab, theme, subDimens),
-                                ],
-                                if (_subTitles.length != _titles.length) ...[
-                                  if (_extraTitles.length == 1) ...[
-                                    _buildTab(_titles, _extraTitles.first,
-                                        theme, subDimens),
-                                  ] else ...[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Padding(
-                                        padding:
-                                            EdgeInsets.only(bottom: kBarHeight),
-                                        child: PopupMenuButton<String>(
-                                          child: Row(
-                                            children: <Widget>[
-                                              Text('More'),
-                                              Container(width: 4.0),
-                                              Icon(Icons.arrow_drop_down),
-                                            ],
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  for (var tab in _subTitles) ...[
+                                    _buildSubTab(_titles, tab, theme),
+                                  ],
+                                  if (_subTitles.length != _titles.length) ...[
+                                    if (_extraTitles.length == 1) ...[
+                                      _buildSubTab(
+                                        _titles,
+                                        _extraTitles.first,
+                                        theme,
+                                      ),
+                                    ] else ...[
+                                      Container(width: 10.0),
+                                      Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Padding(
+                                            padding: EdgeInsets.only(
+                                                bottom: kBarHeight),
+                                            child: PopupMenuButton<String>(
+                                              child: Row(
+                                                children: <Widget>[
+                                                  Text('More'),
+                                                  Container(width: 4.0),
+                                                  Icon(Icons.arrow_drop_down),
+                                                ],
+                                              ),
+                                              onSelected: (val) {
+                                                final _index =
+                                                    _titles.indexOf(val);
+                                                onTabChanged(_index);
+                                              },
+                                              itemBuilder: (context) =>
+                                                  _extraTitles
+                                                      .map(
+                                                        (t) => PopupMenuItem(
+                                                          value: t,
+                                                          child: Text(t),
+                                                        ),
+                                                      )
+                                                      .toList(),
+                                            ),
                                           ),
-                                          onSelected: (val) {
-                                            final _index = _titles.indexOf(val);
-                                            onTabChanged(_index);
-                                          },
-                                          itemBuilder: (context) => _extraTitles
-                                              .map(
-                                                (t) => PopupMenuItem(
-                                                  value: t,
-                                                  child: Text(t),
-                                                ),
-                                              )
-                                              .toList(),
                                         ),
                                       ),
-                                    ),
-                                  ]
+                                    ]
+                                  ],
                                 ],
-                              ],
-                            );
-                          },
-                        )),
+                              );
+                            },
+                          ),
+                        ),
                       )
                     ],
                     Row(
@@ -194,50 +202,41 @@ class MobileSidebar extends StatelessWidget {
     );
   }
 
-  Padding _buildTab(List<String> _titles, String tab, ThemeData theme,
-      BoxConstraints subDimens) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: InkWell(
-        onTap: () {
-          final _index = _titles.indexOf(tab);
-          onTabChanged(_index);
-        },
-        child: LayoutBuilder(
-          builder: (context, tabDimens) => Column(
-            children: <Widget>[
-              ConstrainedBox(
-                constraints:
-                    tabDimens.tighten(height: tabDimens.maxHeight - kBarHeight),
-                child: Tab(text: tab).build(context),
+  Widget _buildSubTab(List<String> _titles, String tab, ThemeData theme) {
+    return InkWell(
+      onTap: () {
+        final _index = _titles.indexOf(tab);
+        onTabChanged(_index);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: AutoSizeText(
+                  tab,
+                  style: theme.textTheme.body2.copyWith(
+                    color: Colors.black,
+                  ),
+                ),
               ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 50),
-                height: kBarHeight,
-                width: _getTextWidth(theme, tab, subDimens) * 2,
-                color: tab == _titles[currentIndex]
-                    ? theme.accentColor
-                    : Colors.transparent,
-              ),
-            ],
-          ),
+            ),
+            AnimatedContainer(
+              duration: Duration(milliseconds: 50),
+              height: kBarHeight,
+              width: tabWidth * 2,
+              color: tab == _titles[currentIndex]
+                  ? theme.accentColor
+                  : Colors.transparent,
+            ),
+          ],
         ),
       ),
     );
   }
 
   final kBarHeight = 3.0;
-
-  double _getTextWidth(ThemeData theme, String label, BoxConstraints dimens) {
-    final style = theme.primaryTextTheme.body2;
-    RenderParagraph renderParagraph = RenderParagraph(
-      TextSpan(text: label, style: style),
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    );
-    renderParagraph.layout(dimens);
-    return renderParagraph.getMinIntrinsicWidth(style.fontSize).ceilToDouble();
-  }
 
   Widget _menuIconBuilder(BuildContext context) {
     if (menuButtonBuilder != null) {

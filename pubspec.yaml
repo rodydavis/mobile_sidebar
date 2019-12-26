@@ -1,6 +1,6 @@
 name: mobile_sidebar
 description: A Responsive Sidebar for Flutter that follows Material Design
-version: 2.0.0+2
+version: 2.0.1
 author: Rody Davis Jr <rody.davis.jr@gmail.com>
 homepage: https://github.com/rodydavis/mobile_sidebar
 environment:
@@ -9,9 +9,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  auto_size_text: ^2.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-    
+
 flutter:
